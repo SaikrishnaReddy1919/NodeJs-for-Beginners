@@ -19,3 +19,30 @@ machine
 => create pull request
 
 #### NOTE : Please try to allocate separate folders for separate topics. Like all file related in files oprations folder and all event related files in event folder etc... If there is no folder created go create one and code there.
+
+
+
+
+
+
+
+
+### Other Info
+#### Status Codes
+
+##### -> 100 range = informational responses
+
+##### -> 200 range = success codes
+
+##### -> 300 range = codes for redirects
+
+##### -> 400 range = user or client error codes
+
+##### -> 500 range = server error codes
+
+#### Some example codes
+##### -> 200 = OK
+##### -> 301 = Resource moved
+##### -> 404 = Not found
+##### -> 500 = Internal server error
+
