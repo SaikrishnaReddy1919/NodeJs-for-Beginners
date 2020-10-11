@@ -1,10 +1,28 @@
 const express = require("express");
+const morgon = require('morgan')
 
 const app = express();
 
 //register view engine
 
 app.set('view engine', 'ejs')
+
+//middleware
+// app.use((req, res, next) => {
+//   console.log('New request was made')
+//   console.log("host : ", req.hostname)
+//   console.log("path : ", req.path)
+//   console.log('method : ', req.method)
+//   next()
+// })
+
+//using morgon
+app.use(morgon('dev'))
+
+//middleware & static files -> images, .css etc...
+app.use(express.static('views/partials/public'))
+//provide the full path of a folder you want to make public.
+
 
 app.get("/", (req, res) => {
   const blogs = [
