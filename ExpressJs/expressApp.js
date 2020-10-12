@@ -8,7 +8,7 @@ const app = express();
 
 //connect to db
 const DB_URI =
-  "mongodb+srv://krishna:Mongodb1919@@ecommerce.wxheo.mongodb.net/Node-tuts";
+  "mongodb+srv://<username>:<password>@ecommerce.wxheo.mongodb.net/Node-tuts";
 
 mongoose
   .connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
