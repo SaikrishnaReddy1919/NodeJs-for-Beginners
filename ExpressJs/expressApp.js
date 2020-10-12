@@ -118,11 +118,21 @@ app.post("/blogs", (req, res) => {
 app.get("/blogs/:id", (req, res) => {
   Blog.findById(req.params.id)
     .then((result) => {
-      res.render('details', { blog : result, title : 'Blog Details' })
+      res.render("details", { blog: result, title: "Blog Details" });
     })
     .catch((err) => {
       console.log(err);
     });
+});
+
+app.delete("/blogs/:id", (req, res) => {
+  Blog.findByIdAndDelete(req.params.id)
+    .then((result) => {
+      res.json({
+        redirect : '/blogs'
+      })
+    })
+    .catch((err) => console.log(err));
 });
 
 app.get("/blogs/create", (req, res) => {
