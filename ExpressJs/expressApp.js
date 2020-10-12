@@ -2,12 +2,13 @@ const express = require("express");
 const morgon = require("morgan");
 const mongoose = require("mongoose");
 const Blog = require("./models/blog");
+const { render } = require("ejs");
 
 const app = express();
 
 //connect to db
 const DB_URI =
-  "mongodb+srv://---------@@ecommerce.wxheo.mongodb.net/Node-tuts";
+  "mongodb+srv://krishna:Mongodb1919@@ecommerce.wxheo.mongodb.net/Node-tuts";
 
 mongoose
   .connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -19,43 +20,47 @@ mongoose
   })
   .catch((err) => console.log(err));
 
-  //add a new blog
-app.get('/add-blog', (req, res) => {
+//add a new blog
+app.get("/add-blog", (req, res) => {
   const blog = new Blog({
-    title: 'New Blog',
-    snippet: 'About my new blog',
-    body:'More about my new blog'
-  })
+    title: "New Blog",
+    snippet: "About my new blog",
+    body: "More about my new blog",
+  });
   const blog2 = new Blog({
-    title: 'New Blog 2',
-    snippet: 'About my new blog',
-    body:'More about my new blog'
-  })
+    title: "New Blog 2",
+    snippet: "About my new blog",
+    body: "More about my new blog",
+  });
 
-  blog.save().then((result) => {
-    res.send(result)
-  }).catch((err) => console.log(err))
+  blog
+    .save()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => console.log(err));
 
-  blog2.save().then((result) => {
-    res.send(result)
-  }).catch((err) => console.log(err))
-})
+  blog2
+    .save()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => console.log(err));
+});
 
 //get all blogs
-app.get('/all-blogs', (req, res) => {
+app.get("/all-blogs", (req, res) => {
   Blog.find()
     .then((result) => res.send(result))
-  .catch((err) => console.log(err))
-})
+    .catch((err) => console.log(err));
+});
 
 //get single blog
-app.get('/single-blog', (req, res) => {
+app.get("/single-blog", (req, res) => {
   Blog.findById("5f83d21c67e66e7ac3972ffe")
     .then((result) => res.send(result))
-    .catch((err) => console.log(err))
-})
-
-
+    .catch((err) => console.log(err));
+});
 
 //------------------------------
 
@@ -78,10 +83,12 @@ app.use(morgon("dev"));
 app.use(express.static("views/partials/public"));
 //provide the full path of a folder you want to make public.
 
+//All the data will be added to request object. -> req.body
+app.use(express.urlencoded({ extended: true }));
 
 //routes
 app.get("/", (req, res) => {
-  res.redirect('/blogs')
+  res.redirect("/blogs");
 });
 
 app.get("/about", (req, res) => {
@@ -89,13 +96,34 @@ app.get("/about", (req, res) => {
 });
 
 //blog-routes
-app.get('/blogs', (req, res) => {
-  Blog.find().sort({ createdAt : -1 })
+app.get("/blogs", (req, res) => {
+  Blog.find()
+    .sort({ createdAt: -1 })
     .then((result) => {
-    res.render('index', { title : 'All Blogs', blogs : result })
+      res.render("index", { title: "All Blogs", blogs: result });
     })
-  .catch((err) => console.log(err))
-})
+    .catch((err) => console.log(err));
+});
+
+app.post("/blogs", (req, res) => {
+  const blog = new Blog(req.body);
+  blog
+    .save()
+    .then((result) => {
+      res.redirect("/blogs");
+    })
+    .catch((err) => console.log(err));
+});
+
+app.get("/blogs/:id", (req, res) => {
+  Blog.findById(req.params.id)
+    .then((result) => {
+      res.render('details', { blog : result, title : 'Blog Details' })
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
 app.get("/blogs/create", (req, res) => {
   res.render("create", { title: "Create a new Blog" });
